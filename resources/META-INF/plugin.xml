@@ -22,6 +22,12 @@
          http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
 
+    <application-components>
+        <component>
+            <implementation-class>slidespresenter.FullScreenImageComponent</implementation-class>
+        </component>
+    </application-components>
+
     <actions>
         <action id="NextSlide" class="slidespresenter.NextSlideAction" text="Next Slide" description="Switch to next slide">
             <keyboard-shortcut keymap="$default" first-keystroke="alt shift F12"/>

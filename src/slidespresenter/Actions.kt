@@ -6,6 +6,9 @@ import com.intellij.notification.Notifications
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.editor.event.DocumentEvent
+import com.intellij.openapi.editor.event.DocumentListener
+import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
@@ -20,7 +23,7 @@ enum class Direction(val value: Int) {
     next(1)
 }
 
-data class Presentation(val slides: List<String>, val currentSlide: String) {
+data class Presentation(val slides: List<String>, val currentSlide: String = "") {
     fun moveSlide(direction: Direction): Presentation {
         var i = slides.indexOf(currentSlide) + direction.value
         if (i < 0) i = 0
@@ -62,8 +65,12 @@ fun openInEditor(fileUrl: String, project: Project): VirtualFile? {
         "file://$fileUrl",
         "file://" + project.basePath + File.separator + fileUrl
     )
-    // note that it has to be refreshAndFindFileByUrl (not just findFileByUrl) otherwise VirtualFile might be null
-    val virtualFile = urlsToTry.asSequence().mapNotNull { fileManager.refreshAndFindFileByUrl(it) }.firstOrNull() ?: return null
+    val virtualFile = urlsToTry.asSequence()
+        .mapNotNull {
+            // note that it has to be refreshAndFindFileByUrl (not just findFileByUrl) otherwise VirtualFile might be null
+            fileManager.refreshAndFindFileByUrl(it)
+        }
+        .firstOrNull() ?: return null
 
     FileEditorManager.getInstance(project).openFile(virtualFile, true, true)
     return virtualFile
@@ -71,11 +78,28 @@ fun openInEditor(fileUrl: String, project: Project): VirtualFile? {
 
 private fun Project.loadSlides(): Presentation? {
     val slidesFile = baseDir.findChild("slides.txt") ?: return null
-    val slidePaths = slidesFile
-        .inputStream.reader().readLines()
-        .map { it.trim() }
-        .filterNot { it.isEmpty() || it.startsWith("//") || it.startsWith("#") }
-    if (slidePaths.isEmpty()) return null
 
-    return Presentation(slidePaths, slidePaths.first())
+    val document = FileDocumentManager.getInstance().getDocument(slidesFile)
+    document?.addDocumentListener(object : DocumentListener {
+        override fun documentChanged(event: DocumentEvent) {
+            val lines = event.document.text.split("\n")
+            var updatedPresentation = lines.parseAsPresentation()
+            if (updatedPresentation != null) {
+                val presentation = getUserData(presentationKey)
+                if (presentation != null && updatedPresentation.slides.contains(presentation.currentSlide)) {
+                    updatedPresentation = updatedPresentation.copy(currentSlide = presentation.currentSlide)
+                }
+                putUserData(presentationKey, updatedPresentation)
+            }
+        }
+    }, this)
+
+    val lines = slidesFile.inputStream.reader().readLines()
+    return lines.parseAsPresentation()
+}
+
+private fun List<String>.parseAsPresentation(): Presentation? {
+    val slidePaths = map { it.trim() }.filterNot { it.isEmpty() || it.startsWith("//") || it.startsWith("#") }.distinct()
+    return if (slidePaths.isEmpty()) null
+    else Presentation(slidePaths)
 }
