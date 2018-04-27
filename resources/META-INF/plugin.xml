@@ -1,0 +1,33 @@
+<idea-plugin>
+    <name>slides-presenter</name>
+    <description>Slides Presenter</description>
+    <version>0.1</version>
+    <vendor url="http://github.com/dkandalov/slides-presenter">Dmitry Kandalov</vendor>
+    <description>
+        <![CDATA[
+        <html>
+        <body>
+        Plugin for combining slides and code in presentation mode.
+        See <a href="https://github.com/dkandalov/slides-presenter">plugin page on GitHub</a> for more details.
+        </body>
+        </html>
+        ]]>
+    </description>
+
+    <!-- http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html -->
+    <!-- Since IJ 2016.1 which has Kotlin support. -->
+    <idea-version since-build="145"/>
+
+    <!-- Make plugin available in all IntelliJ IDEs
+         http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <actions>
+        <action id="NextSlide" class="slidespresenter.NextSlideAction" text="Next Slide" description="Switch to next slide">
+            <keyboard-shortcut keymap="$default" first-keystroke="alt shift F12"/>
+        </action>
+        <action id="PreviousSlide" class="slidespresenter.PreviousSlideAction" text="Previous Slide" description="Switch to previous slide">
+            <keyboard-shortcut keymap="$default" first-keystroke="alt shift F11"/>
+        </action>
+    </actions>
+</idea-plugin>
