@@ -17,12 +17,16 @@ class FullScreenImageComponent: ApplicationComponent {
                 val editor = source.getSelectedEditor(file)
                 if (editor?.component?.javaClass?.name?.contains("ImageEditorUI") == true) {
                     val ui = editor.component
+
+                    // Remove top panel with buttons
                     ui.remove(0)
-                    val zoomModel = accessField(ui, "zoomModel", ImageZoomModel::class.java)
-                    zoomModel.zoomFactor = 1.1
+
+                    // Change background color of the scrollpane around image so that it blurs with it
                     val scrollPane = accessField(ui, listOf("g", "myScrollPane"), JScrollPane::class.java)
                     scrollPane.viewport.background = JBColor.white
-                    scrollPane.viewport.repaint()
+
+                    val zoomModel = accessField(ui, "zoomModel", ImageZoomModel::class.java)
+                    zoomModel.zoomFactor = 1.1
                 }
 
 //                val relativePath = file.canonicalPath.replace(slidesBasePath, "")
