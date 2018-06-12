@@ -11,9 +11,8 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.JBColor
 import org.intellij.images.editor.ImageZoomModel
 import org.intellij.images.options.OptionsManager
-import org.intellij.images.options.TransparencyChessboardOptions.ATTR_BLACK_COLOR
-import org.intellij.images.options.TransparencyChessboardOptions.ATTR_WHITE_COLOR
 import org.intellij.images.options.ZoomOptions.ATTR_SMART_ZOOMING
+import org.intellij.images.ui.ImageComponent
 import java.awt.Color
 import javax.swing.JScrollPane
 
@@ -30,16 +29,24 @@ class FullScreenImageComponent: ApplicationComponent {
 
                 val editor = source.getSelectedEditor(file)
                 if (editor?.component?.javaClass?.name?.contains("ImageEditorUI") == true) {
-                    val ui = editor.component
+                    val ui = editor.component // instance of ImageEditorUI class which is not public and cannot be accessed here directly
 
                     // Remove top panel with buttons
                     ui.remove(0)
 
-                    // Change background color of the scrollpane around image so that it blurs with it
+                    // Change colors so that image blurs with scrollpane and doesn't have a border
                     val scrollPane = accessField(ui, listOf("g", "myScrollPane"), JScrollPane::class.java)
-                    scrollPane.viewport.background = JBColor.white
+                    val imageComponent = accessField(editor.component, "imageComponent", ImageComponent::class.java)
+                    val color = imageComponent.document.value.getRGB(0, 0).let { rgbInt: Int ->
+                        val r = rgbInt.shr(16).and(0xFF)
+                        val g = rgbInt.shr(8).and(0xFF)
+                        val b = rgbInt.and(0xFF)
+                        Color(r, g, b)
+                    }
+                    imageComponent.setTransparencyChessboardBlankColor(color)
+                    scrollPane.viewport.background = JBColor(color, color)
 
-                    // Zoom in a bit so that the slide takes more space on screen
+                    // Zoom in a bit so that image takes more space on screen
                     val zoomModel = accessField(ui, "zoomModel", ImageZoomModel::class.java)
                     zoomModel.zoomFactor = 1.1
                 }
@@ -50,30 +57,16 @@ class FullScreenImageComponent: ApplicationComponent {
     }
 
     private fun initGlobalUISettingsToggle() {
-        var savedWhiteColor: Color? = null
-        var savedBlackColor: Color? = null
         var savedSmartZooming: Boolean? = null
 
         ApplicationManager.getApplication().messageBus.connect().subscribe(UISettingsListener.TOPIC, UISettingsListener {
-            val options = OptionsManager.getInstance().options
-            val chessboardOptions = options.editorOptions.transparencyChessboardOptions
-            val zoomOptions = options.editorOptions.zoomOptions
+            val zoomOptions = OptionsManager.getInstance().options.editorOptions.zoomOptions
 
             if (UISettings.instance.presentationMode) {
-                savedWhiteColor = chessboardOptions.whiteColor
-                savedBlackColor = chessboardOptions.blackColor
                 savedSmartZooming = zoomOptions.isSmartZooming
-
-                chessboardOptions.setOption(ATTR_WHITE_COLOR, JBColor.white)
-                chessboardOptions.setOption(ATTR_BLACK_COLOR, JBColor.white) // set to white so that there is no border around image
                 zoomOptions.setOption(ATTR_SMART_ZOOMING, false) // disable so that zoomFactor can be set in the code below
             } else {
-                if (savedWhiteColor != null) chessboardOptions.setOption(ATTR_WHITE_COLOR, savedWhiteColor)
-                if (savedBlackColor != null) chessboardOptions.setOption(ATTR_BLACK_COLOR, savedBlackColor)
                 if (savedSmartZooming != null) zoomOptions.setOption(ATTR_SMART_ZOOMING, savedSmartZooming)
-
-                savedWhiteColor = null
-                savedBlackColor = null
                 savedSmartZooming = null
             }
         })
