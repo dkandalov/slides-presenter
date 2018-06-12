@@ -43,7 +43,8 @@ fun Project.switchSlide(direction: Direction) {
 
 private fun String.toVirtualFile(basePath: @SystemIndependent String = ""): VirtualFile? {
     val filePath = "file://" + basePath + File.separator + this
-    return VirtualFileManager.getInstance().refreshAndFindFileByUrl(filePath) ?: toVirtualFile(basePath = "")
+    val virtualFile = VirtualFileManager.getInstance().refreshAndFindFileByUrl(filePath)
+    return if (basePath != "" && virtualFile == null) toVirtualFile(basePath = "") else virtualFile
 }
 
 private val presentationKey = Key<Presentation>("presentation")
@@ -52,28 +53,45 @@ private val presentationKey = Key<Presentation>("presentation")
 class PresentationLoaderComponent(private val project: Project): ProjectComponent {
     override fun projectOpened() {
         val presentation = project.loadPresentation()
+        if (presentation != null) validateSlides(presentation.slides)
+
         project.putUserData(presentationKey, presentation)
     }
 
     private fun Project.loadPresentation(): Presentation? {
         val slidesFile = baseDir.findChild("slides.txt") ?: return null
 
+        initSlidesFileModificationListener(slidesFile, this)
+
+        val lines = slidesFile.inputStream.reader().readLines()
+        return lines.parseAsPresentation()
+    }
+
+    private fun validateSlides(slides: List<String>) {
+        val missingSlides = slides
+            .map { Pair(it, it.toVirtualFile(project.basePath!!)) }
+            .filter { it.second == null }
+            .joinToString("<br/>") { it.first }
+
+        if (missingSlides.isNotEmpty()) {
+            showNotification("The following slides could not be found<br/>$missingSlides")
+        }
+    }
+
+    private fun initSlidesFileModificationListener(slidesFile: VirtualFile, project: Project) {
         val document = FileDocumentManager.getInstance().getDocument(slidesFile)
         document?.addDocumentListener(object: DocumentListener {
             override fun documentChanged(event: DocumentEvent) {
                 val lines = event.document.text.split("\n")
                 var updatedPresentation = lines.parseAsPresentation()
                 if (updatedPresentation != null) {
-                    val presentation = getUserData(presentationKey)
+                    val presentation = project.getUserData(presentationKey)
                     if (presentation != null && updatedPresentation.slides.contains(presentation.currentSlide)) {
                         updatedPresentation = updatedPresentation.copy(currentSlide = presentation.currentSlide)
                     }
-                    putUserData(presentationKey, updatedPresentation)
+                    project.putUserData(presentationKey, updatedPresentation)
                 }
             }
-        }, this)
-
-        val lines = slidesFile.inputStream.reader().readLines()
-        return lines.parseAsPresentation()
+        }, project)
     }
 }
