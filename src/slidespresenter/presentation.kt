@@ -9,7 +9,6 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileManager
-import org.jetbrains.annotations.SystemIndependent
 import java.io.File
 
 enum class Direction(val value: Int) {
@@ -41,7 +40,7 @@ fun Project.switchSlide(direction: Direction) {
     FileEditorManager.getInstance(this).openFile(virtualFile, true, true)
 }
 
-private fun String.toVirtualFile(basePath: @SystemIndependent String = ""): VirtualFile? {
+private fun String.toVirtualFile(basePath: String = ""): VirtualFile? {
     val filePath = "file://" + basePath + File.separator + this
     val virtualFile = VirtualFileManager.getInstance().refreshAndFindFileByUrl(filePath)
     return if (basePath != "" && virtualFile == null) toVirtualFile(basePath = "") else virtualFile
