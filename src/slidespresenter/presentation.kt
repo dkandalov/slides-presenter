@@ -1,13 +1,12 @@
 package slidespresenter
 
 import com.intellij.openapi.components.ProjectComponent
-import com.intellij.openapi.editor.event.DocumentEvent
-import com.intellij.openapi.editor.event.DocumentListener
-import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.vfs.VirtualFileEvent
+import com.intellij.openapi.vfs.VirtualFileListener
 import com.intellij.openapi.vfs.VirtualFileManager
 import java.io.File
 
@@ -88,10 +87,11 @@ class PresentationLoaderComponent(private val project: Project): ProjectComponen
     }
 
     private fun initSlidesFileModificationListener(slidesFile: VirtualFile, project: Project) {
-        val document = FileDocumentManager.getInstance().getDocument(slidesFile)
-        document?.addDocumentListener(object: DocumentListener {
-            override fun documentChanged(event: DocumentEvent) {
-                val lines = event.document.text.split("\n")
+        VirtualFileManager.getInstance().addVirtualFileListener(object : VirtualFileListener {
+            override fun contentsChanged(event: VirtualFileEvent) {
+                if (event.file != slidesFile) return
+
+                val lines = event.file.inputStream.reader().readLines()
                 var updatedPresentation = lines.parseAsPresentation()
                 if (updatedPresentation != null) {
                     val presentation = project.getUserData(presentationKey)
