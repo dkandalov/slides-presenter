@@ -28,6 +28,12 @@
         </component>
     </application-components>
 
+    <project-components>
+        <component>
+            <implementation-class>slidespresenter.PresentationLoaderComponent</implementation-class>
+        </component>
+    </project-components>
+
     <actions>
         <action id="NextSlide" class="slidespresenter.NextSlideAction" text="Next Slide" description="Switch to next slide">
             <keyboard-shortcut keymap="$default" first-keystroke="alt shift F12"/>

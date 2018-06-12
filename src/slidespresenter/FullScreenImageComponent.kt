@@ -26,7 +26,8 @@ class FullScreenImageComponent: ApplicationComponent {
     private fun initOpenFileListener() {
         val listener = object: FileEditorManagerListener {
             override fun fileOpened(source: FileEditorManager, file: VirtualFile) {
-                if (!UISettings.instance.presentationMode) return
+                //if (!UISettings.instance.presentationMode) return
+                if (!source.project.containsSlide(file)) return
 
                 val editor = source.getSelectedEditor(file)
                 if (editor?.component?.javaClass?.name?.contains("ImageEditorUI") == true) {
@@ -39,13 +40,14 @@ class FullScreenImageComponent: ApplicationComponent {
                     val scrollPane = accessField(ui, listOf("g", "myScrollPane"), JScrollPane::class.java)
                     scrollPane.viewport.background = JBColor.white
 
+                    // Zoom in a bit so that the slide takes more space on screen
                     val zoomModel = accessField(ui, "zoomModel", ImageZoomModel::class.java)
                     zoomModel.zoomFactor = 1.1
                 }
 
-    //                val relativePath = file.canonicalPath.replace(slidesBasePath, "")
-    //                val i = slides.indexOf(relativePath)
-    //                if (i != -1) currentSlide = i
+    //          val relativePath = file.canonicalPath.replace(slidesBasePath, "")
+    //          val i = slides.indexOf(relativePath)
+    //          if (i != -1) currentSlide = i
             }
         }
         val application = ApplicationManager.getApplication()
