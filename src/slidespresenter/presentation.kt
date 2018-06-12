@@ -16,12 +16,22 @@ enum class Direction(val value: Int) {
     next(1)
 }
 
-data class Presentation(val slides: List<String>, val currentSlide: String = "") {
+data class Presentation(
+    val slides: List<String>,
+    val currentSlide: String = "",
+    private val currentSlideIndex: Int = slides.indexOf(currentSlide)
+) {
     fun moveSlide(direction: Direction): Presentation {
-        var i = slides.indexOf(currentSlide) + direction.value
+        var i = currentSlideIndex + direction.value
         if (i < 0) i = 0
         if (i >= slides.size) i = slides.size - 1
-        return copy(currentSlide = slides[i])
+        return copy(currentSlide = slides[i], currentSlideIndex = i)
+    }
+
+    fun loadStateFrom(that: Presentation?): Presentation? {
+        if (that == null) return null
+        val i = slides.indexOf(that.currentSlide)
+        return if (i != -1) Presentation(slides, that.currentSlide, i) else null
     }
 }
 
@@ -73,7 +83,7 @@ class PresentationLoaderComponent(private val project: Project): ProjectComponen
             .joinToString("<br/>") { it.first }
 
         if (missingSlides.isNotEmpty()) {
-            showNotification("The following slides could not be found<br/>$missingSlides")
+            showNotification("The following slides could not be found:<br/>$missingSlides")
         }
     }
 
@@ -85,11 +95,9 @@ class PresentationLoaderComponent(private val project: Project): ProjectComponen
                 var updatedPresentation = lines.parseAsPresentation()
                 if (updatedPresentation != null) {
                     val presentation = project.getUserData(presentationKey)
-                    if (presentation != null && updatedPresentation.slides.contains(presentation.currentSlide)) {
-                        updatedPresentation = updatedPresentation.copy(currentSlide = presentation.currentSlide)
-                    }
-                    project.putUserData(presentationKey, updatedPresentation)
+                    updatedPresentation = updatedPresentation.loadStateFrom(presentation)
                 }
+                project.putUserData(presentationKey, updatedPresentation)
             }
         }, project)
     }
