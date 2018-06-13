@@ -36,3 +36,5 @@ src/code.js
 src/more-code.js
 slides/slides.{{next 2}}.png
 ```
+
+For real-world example see [slides-txt](https://github.com/dkandalov/coroutines-explained/blob/b958731f5acd94a8cf3a75e5bcc5578afc7a7547/slides.txt) in `coroutines-explained` repository.
