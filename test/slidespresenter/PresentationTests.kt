@@ -7,6 +7,7 @@ import slidespresenter.Direction.next
 import slidespresenter.Direction.previous
 
 class PresentationTests {
+
     @Test fun `parse lines as presentation`() {
         assertThat(emptyList<String>().parseAsPresentation(), equalTo<Presentation>(null))
 
@@ -37,5 +38,20 @@ class PresentationTests {
         assertThat(it.moveSlide(next).moveSlide(next).currentSlide, equalTo("slide2"))
         assertThat(it.moveSlide(next).moveSlide(next).moveSlide(next).currentSlide, equalTo("slide2"))
         assertThat(it.moveSlide(next).moveSlide(previous).currentSlide, equalTo("slide1"))
+    }
+
+    @Test fun `load state from another presentation`() {
+        assertThat(
+            Presentation(slides = listOf("slide1", "slide2", "slide3"))
+                .loadStateFrom(Presentation(slides = listOf("slide1", "slide2"), currentSlide = "slide2"))
+                .currentSlide,
+            equalTo("slide2")
+        )
+        assertThat(
+            Presentation(slides = listOf("slide1", "slide2", "slide3"))
+                .loadStateFrom(Presentation(slides = listOf("slide0", "slide2"), currentSlide = "slide0"))
+                .currentSlide,
+            equalTo("")
+        )
     }
 }

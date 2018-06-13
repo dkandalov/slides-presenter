@@ -27,10 +27,10 @@ data class Presentation(
         return copy(currentSlide = slides[i], currentSlideIndex = i)
     }
 
-    fun loadStateFrom(that: Presentation?): Presentation? {
-        if (that == null) return null
+    fun loadStateFrom(that: Presentation?): Presentation {
+        if (that == null) return this
         val i = slides.indexOf(that.currentSlide)
-        return if (i != -1) Presentation(slides, that.currentSlide, i) else null
+        return if (i != -1) Presentation(slides, that.currentSlide, i) else this
     }
 }
 
