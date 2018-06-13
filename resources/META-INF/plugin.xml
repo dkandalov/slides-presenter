@@ -7,7 +7,7 @@
         <![CDATA[
         <html>
         <body>
-        Plugin for combining slides and code in presentation mode.
+        This is a plugin to show slides and code examples directly from for IntelliJ IDEs.
         See <a href="https://github.com/dkandalov/slides-presenter">plugin page on GitHub</a> for more details.
         </body>
         </html>
@@ -38,13 +38,13 @@
         <action id="NextSlide" class="slidespresenter.NextSlideAction" text="Next Slide" description="Switch to next slide">
             <keyboard-shortcut keymap="$default" first-keystroke="alt shift F12"/>
         </action>
-        <action id="PreviousSlide" class="slidespresenter.PreviousSlideAction" text="Switch to previous slide" description="Switch to previous slide">
+        <action id="PreviousSlide" class="slidespresenter.PreviousSlideAction" text="Previous Slide" description="Switch to previous slide">
             <keyboard-shortcut keymap="$default" first-keystroke="alt shift F11"/>
         </action>
-        <action id="SkipNextTenSlides" class="slidespresenter.SkipNextTenSlidesAction" text="Skip next 10 slides" description="Skip next 10 slides">
+        <action id="SkipNextTenSlides" class="slidespresenter.SkipNextTenSlidesAction" text="Skip Next 10 Slides" description="Skip next 10 slides">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt shift F12"/>
         </action>
-        <action id="SkipPreviousTenSlides" class="slidespresenter.SkipPreviousTenSlidesAction" text="Previous Slide" description="Skip previous 10 slides">
+        <action id="SkipPreviousTenSlides" class="slidespresenter.SkipPreviousTenSlidesAction" text="Skip Previous 10 Slides" description="Skip previous 10 slides">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt shift F11"/>
         </action>
     </actions>
