@@ -3,7 +3,7 @@ package slidespresenter
 
 fun List<String>.parseAsPresentation(): Presentation? {
     val slidePaths = map { it.trim() }
-        .filterNot { it.isEmpty() || it.startsWith("//") || it.startsWith("#") }
+        .filterNot { it.isEmpty() || it.startsWith("--") || it.startsWith("#") }
 
     return if (slidePaths.isEmpty()) null
     else Presentation(slidePaths).expandSlidesWithTemplate()

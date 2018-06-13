@@ -8,24 +8,24 @@ import slidespresenter.Direction.previous
 
 class PresentationTests {
 
-    @Test fun `parse lines as presentation`() {
+    @Test fun `parse text as presentation`() {
         assertThat(emptyList<String>().parseAsPresentation(), equalTo<Presentation>(null))
 
-        assertThat(listOf("slide1.png").parseAsPresentation(), equalTo(Presentation(
-            slides = listOf("slide1.png")
-        )))
+        assertThat(listOf("slide1.png").parseAsPresentation(), equalTo(
+            Presentation(slides = listOf("slide1.png"))
+        ))
 
-        assertThat(listOf("slide1.png", "", "slide2.png").parseAsPresentation(), equalTo(Presentation(
-            slides = listOf("slide1.png", "slide2.png")
-        )))
+        assertThat(listOf("slide1.png", "", "  ", "-- comment", "# comment", "slide2.png").parseAsPresentation(), equalTo(
+            Presentation(slides = listOf("slide1.png", "slide2.png"))
+        ))
 
-        assertThat(listOf("slide{{next 3}}.png", "some-slide.png", "slide{{next 3}}.png").parseAsPresentation(), equalTo(Presentation(
-            slides = listOf(
+        assertThat(listOf("slide{{next 3}}.png", "some-slide.png", "slide{{next 3}}.png").parseAsPresentation(), equalTo(
+            Presentation(slides = listOf(
                 "slide001.png", "slide002.png", "slide003.png",
                 "some-slide.png",
                 "slide004.png", "slide005.png", "slide006.png"
-            )
-        )))
+            ))
+        ))
     }
 
     @Test fun `move to next, previous slide`() {
