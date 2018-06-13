@@ -29,15 +29,18 @@ class PresentationTests {
     }
 
     @Test fun `move to next, previous slide`() {
-        val it = Presentation(slides = listOf("slide1", "slide2"))
+        val it = Presentation(slides = listOf("slide1", "slide2", "slide3"))
 
         assertThat(it.currentSlide, equalTo(""))
 
         assertThat(it.moveSlide(previous).currentSlide, equalTo("slide1"))
         assertThat(it.moveSlide(next).currentSlide, equalTo("slide1"))
         assertThat(it.moveSlide(next).moveSlide(next).currentSlide, equalTo("slide2"))
-        assertThat(it.moveSlide(next).moveSlide(next).moveSlide(next).currentSlide, equalTo("slide2"))
         assertThat(it.moveSlide(next).moveSlide(previous).currentSlide, equalTo("slide1"))
+
+        assertThat(it.moveSlide(next).moveSlide(next).moveSlide(next).currentSlide, equalTo("slide3"))
+        assertThat(it.moveSlide(next, stepSize = 3).currentSlide, equalTo("slide3"))
+        assertThat(it.moveSlide(next, stepSize = 4).currentSlide, equalTo("slide3"))
     }
 
     @Test fun `load state from another presentation`() {

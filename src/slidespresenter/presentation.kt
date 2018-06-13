@@ -20,8 +20,8 @@ data class Presentation(
     val currentSlide: String = "",
     private val currentSlideIndex: Int = slides.indexOf(currentSlide)
 ) {
-    fun moveSlide(direction: Direction): Presentation {
-        var i = currentSlideIndex + direction.value
+    fun moveSlide(direction: Direction, stepSize: Int = 1): Presentation {
+        var i = currentSlideIndex + (stepSize * direction.value)
         if (i < 0) i = 0
         if (i >= slides.size) i = slides.size - 1
         return copy(currentSlide = slides[i], currentSlideIndex = i)
@@ -39,8 +39,8 @@ fun Project.containsSlide(file: VirtualFile): Boolean {
     return presentation.slides.contains(file.path.replace("$basePath/", ""))
 }
 
-fun Project.switchSlide(direction: Direction) {
-    val presentation = (getUserData(presentationKey) ?: return).moveSlide(direction)
+fun Project.switchSlide(direction: Direction, stepSize: Int = 1) {
+    val presentation = (getUserData(presentationKey) ?: return).moveSlide(direction, stepSize)
     putUserData(presentationKey, presentation)
 
     val virtualFile = presentation.currentSlide.toVirtualFile(basePath!!)
