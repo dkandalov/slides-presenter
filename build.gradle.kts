@@ -55,6 +55,7 @@ kotlin {
 
 intellij {
     val ideVersion = System.getenv().getOrDefault("SLIDES_PRESENTER_PLUGIN_IDEA_VERSION", "IC-172.3757.29")
+//    val ideVersion = System.getenv().getOrDefault("SLIDES_PRESENTER_PLUGIN_IDEA_VERSION", "IU-182.2949.2")
     println("Using ide version: $ideVersion")
     version = ideVersion
     pluginName = "slides-presenter"
