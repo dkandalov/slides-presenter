@@ -8,7 +8,6 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.fileEditor.FileEditorManagerListener
 import com.intellij.openapi.fileEditor.FileEditorManagerListener.FILE_EDITOR_MANAGER
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.ui.JBColor
 import org.intellij.images.editor.ImageZoomModel
 import org.intellij.images.options.OptionsManager
 import org.intellij.images.options.ZoomOptions.ATTR_SMART_ZOOMING
@@ -32,11 +31,11 @@ class FullScreenImageComponent: ApplicationComponent {
                     val ui = editor.component // instance of ImageEditorUI class which is not public and cannot be accessed here directly
 
                     // Remove top panel with buttons
-                    ui.remove(0)
+                    if (ui.componentCount == 2) ui.remove(0)
 
                     // Change colors so that image blurs with scrollpane and doesn't have a border
-                    val scrollPane = accessField(ui, listOf("g", "myScrollPane"), JScrollPane::class.java)
-                    val imageComponent = accessField(editor.component, "imageComponent", ImageComponent::class.java)
+                    val scrollPane = ui.accessField(listOf("myScrollPane", "g", ""), JScrollPane::class.java)
+                    val imageComponent = ui.accessField(listOf("imageComponent", ""), ImageComponent::class.java)
                     val color = imageComponent.document.value.getRGB(0, 0).let { rgbInt: Int ->
                         val r = rgbInt.shr(16).and(0xFF)
                         val g = rgbInt.shr(8).and(0xFF)
@@ -44,10 +43,10 @@ class FullScreenImageComponent: ApplicationComponent {
                         Color(r, g, b)
                     }
                     imageComponent.setTransparencyChessboardBlankColor(color)
-                    scrollPane.viewport.background = JBColor(color, color)
+                    scrollPane.viewport.background = color
 
                     // Zoom in a bit so that image takes more space on screen
-                    val zoomModel = accessField(ui, "zoomModel", ImageZoomModel::class.java)
+                    val zoomModel = ui.accessField(listOf("zoomModel", ""), ImageZoomModel::class.java)
                     zoomModel.zoomFactor = 1.1
                 }
             }
@@ -71,5 +70,4 @@ class FullScreenImageComponent: ApplicationComponent {
             }
         })
     }
-
 }

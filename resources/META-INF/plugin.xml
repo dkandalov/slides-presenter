@@ -15,8 +15,8 @@
     </description>
 
     <!-- http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html -->
-    <!-- Since IJ 2016.1 which has Kotlin support. -->
-    <idea-version since-build="145"/>
+    <!-- Since IJ 2017.2 because most of its APIs are relatively up-to-date. -->
+    <idea-version since-build="172.3757.29"/>
 
     <!-- Make plugin available in all IntelliJ IDEs
          http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->

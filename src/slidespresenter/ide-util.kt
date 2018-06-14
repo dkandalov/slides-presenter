@@ -13,20 +13,20 @@ fun showNotification(message: String) {
     ApplicationManager.getApplication().messageBus.syncPublisher(Notifications.TOPIC).notify(notification)
 }
 
-fun <T> accessField(o: Any, possibleFieldNames: List<String>, fieldClass: Class<T>): T {
+fun <T> Any.accessField(possibleFieldNames: List<String>, fieldClass: Class<T>): T {
     possibleFieldNames.forEach { fieldName ->
         try {
-            val result = accessField(o, fieldName, fieldClass)
+            val result = accessField(this, fieldName, fieldClass)
             if (result != null) return result
         } catch (ignored: Exception) {
         }
     }
     throw IllegalStateException("Didn't find any of the fields [${possibleFieldNames.joinToString(",")}] " +
-                                    "(with class ${fieldClass.canonicalName}) in object $o")
+                                    "(with class ${fieldClass.canonicalName}) in object ${this}")
 }
 
 @Suppress("USELESS_CAST", "UNCHECKED_CAST")
-fun <T> accessField(o: Any, fieldName: String, fieldClass: Class<T>): T {
+private fun <T> accessField(o: Any, fieldName: String, fieldClass: Class<T>): T {
     var aClass: Class<Any>? = o.javaClass
     val allClasses = ArrayList<Class<Any>?>()
     while (aClass != null && aClass != Object::javaClass) {
@@ -35,11 +35,9 @@ fun <T> accessField(o: Any, fieldName: String, fieldClass: Class<T>): T {
     }
     val allFields = allClasses.filterNotNull().flatMap { it.declaredFields.toList() }
 
-    allFields.forEach { field ->
-        if (field.name == fieldName && fieldClass.isAssignableFrom(field.type)) {
-            field.isAccessible = true
-            return field.get(o) as T
-        }
-    }
-    throw IllegalStateException("Didn't find field '$fieldName' (with class ${fieldClass.canonicalName}) in object $o")
+    val field = allFields.find { (fieldName == "" || it.name == fieldName) && fieldClass.isAssignableFrom(it.type) }
+        ?: throw IllegalStateException("Didn't find field '$fieldName' (with class ${fieldClass.canonicalName}) in object $o")
+    
+    field.isAccessible = true
+    return field.get(o) as T
 }
