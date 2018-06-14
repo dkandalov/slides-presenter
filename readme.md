@@ -1,9 +1,9 @@
 [![Build Status](https://travis-ci.org/dkandalov/slides-presenter.svg?branch=master)](https://travis-ci.org/dkandalov/slides-presenter)
 
 ## Slides presenter plugin
-This is a plugin to show slides and code examples directly from for IntelliJ IDEs.
+This is a plugin to show slides and code examples directly from IntelliJ IDEs.
 
-### Why?
+## Why?
 It can be useful if large part of your presentation is based on code examples, so instead of pasting code into Keynote or PowerPoint slides you can show both slides and code in IDE. 
  
  - Code examples stay up-to-date. 
@@ -11,7 +11,7 @@ It can be useful if large part of your presentation is based on code examples, s
  - Smooth transition between slides and code examples.
 
 
-### How to use?
+## How to use?
 
 1. Create `slides.txt` in the project with code examples.
 2. Add slides as images to the project folder (e.g. in Keynote in the main menu `File -> Export To -> Images...`).
@@ -20,7 +20,7 @@ It can be useful if large part of your presentation is based on code examples, s
 5. Use `Next Slide` and `Previous Slide` actions. It's recommended to change default shortcuts to something more convenient, e.g. `F12`, `F11` (the only reason for defaults shortcuts `alt-shift-F12`, `alt-shift-F11` is that they don't conflict with other actions).
  
  
-### Format of slides.txt
+## Format of slides.txt
 - Empty lines and lines starting with `--` or `#` are ignored.
 - Each line contains a path to a file with unix-style path separator `/` which can be an absolute path or path relative to the project root.  
 - Paths can include special syntax `{{next N}}` where `N` is the amount of times the line will be repeated with incremented counter. E.g. `slides/slides.{{next 2}}.png` will be expanded into two lines `slides/slides.000.png` and `slides/slides.001.png`.
