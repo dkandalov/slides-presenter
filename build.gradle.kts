@@ -1,5 +1,5 @@
+
 import org.gradle.api.JavaVersion.VERSION_1_8
-import org.gradle.api.internal.HasConvention
 import org.jetbrains.kotlin.gradle.dsl.Coroutines
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
@@ -14,8 +14,8 @@ buildscript {
 plugins {
     java
     idea
-    kotlin("jvm") version "1.1.1"
-    id("org.jetbrains.intellij") version "0.2.17"
+    kotlin("jvm") version "1.3.10"
+    id("org.jetbrains.intellij") version "0.4.8"
 }
 java {
     sourceCompatibility = VERSION_1_8
@@ -44,8 +44,8 @@ java.sourceSets {
 tasks.withType<KotlinJvmCompile> {
     kotlinOptions {
         jvmTarget = "1.8"
-        apiVersion = "1.1"
-        languageVersion = "1.1"
+        apiVersion = "1.3"
+        languageVersion = "1.3"
     }
 }
 
@@ -54,8 +54,8 @@ kotlin {
 }
 
 intellij {
-    val ideVersion = System.getenv().getOrDefault("SLIDES_PRESENTER_PLUGIN_IDEA_VERSION", "IC-172.3757.29")
-//    val ideVersion = System.getenv().getOrDefault("SLIDES_PRESENTER_PLUGIN_IDEA_VERSION", "IU-182.2949.2")
+    // (to find available IDE versions see https://www.jetbrains.com/intellij-repository/releases)
+    val ideVersion = System.getenv().getOrDefault("SLIDES_PRESENTER_PLUGIN_IDEA_VERSION", "191.7141.44")
     println("Using ide version: $ideVersion")
     version = ideVersion
     pluginName = "slides-presenter"

@@ -4,10 +4,7 @@ import com.intellij.openapi.components.ProjectComponent
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
-import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.openapi.vfs.VirtualFileEvent
-import com.intellij.openapi.vfs.VirtualFileListener
-import com.intellij.openapi.vfs.VirtualFileManager
+import com.intellij.openapi.vfs.*
 import java.io.File
 
 enum class Direction(val value: Int) {
@@ -67,7 +64,8 @@ class PresentationLoaderComponent(private val project: Project): ProjectComponen
     }
 
     private fun Project.loadPresentation(): Presentation? {
-        val slidesFile = baseDir.findChild("slides.txt") ?: return null
+        val baseDir = LocalFileSystem.getInstance().findFileByPath(basePath ?: return null)
+        val slidesFile = baseDir?.findChild("slides.txt") ?: return null
 
         initSlidesFileModificationListener(slidesFile, this)
 

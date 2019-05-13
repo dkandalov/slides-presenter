@@ -1,7 +1,6 @@
 <idea-plugin>
     <name>slides-presenter</name>
-    <description>Slides Presenter</description>
-    <version>0.1</version>
+    <version>0.1.1</version>
     <vendor url="http://github.com/dkandalov/slides-presenter">Dmitry Kandalov</vendor>
     <description>
         <![CDATA[
@@ -15,12 +14,15 @@
     </description>
 
     <!-- http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html -->
-    <!-- Since IJ 2017.2 because most of its APIs are relatively up-to-date. -->
-    <idea-version since-build="172.3757.29"/>
+    <idea-version since-build="191.1.2"/>
 
     <!-- Make plugin available in all IntelliJ IDEs
          http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <registryKey key="slides.presenter.zoom.factor" defaultValue="1.0" description=""/>
+    </extensions>
 
     <application-components>
         <component>
