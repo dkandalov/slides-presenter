@@ -4,7 +4,7 @@
 This is a plugin to show slides and code examples directly from IntelliJ IDEs.
 
 ## Why?
-It can be useful if large part of your presentation is based on code examples, so instead of pasting code into Keynote or PowerPoint slides you can show both slides and code in IDE. 
+It can be useful if large part of your presentation is based on code examples, so instead of copy-pasting code into Keynote or PowerPoint slides you can show both slides and code in IDE. 
  
  - Code examples stay up-to-date. 
  - You can run and modify code examples live to show how they work.
@@ -13,11 +13,11 @@ It can be useful if large part of your presentation is based on code examples, s
 
 ## How to use?
 
-1. Create `slides.txt` in the project with code examples.
-2. Add slides as images to the project folder (e.g. in Keynote in the main menu `File -> Export To -> Images...`).
+1. Create `slides.txt` in IDE project with code examples.
+2. Save presentation slides as images to some folder in IDE project folder (e.g. in Keynote in the main menu `File -> Export To -> Images...`). Note that ideally, images should be in the same resolution as the projector/screen you're going to present on (e.g. in Keynote click on `Document` in the main toolbar and choose `Slide Size` with custom slide size; note that `Widescreen (16:9)` corresponds to `1920×1080 px` aka [Full HD](https://en.wikipedia.org/wiki/1080p) which seems to be the most common resolution at conferences at the moment). You can also change `slides.presenter.zoom.factor` in IDE Registry to scale slides, but unscaled images usually look better.
 3. Edit `slides.txt` so that it contains paths to slides image files and code examples (see format description below). Note that you can use `Save All` action to make plugin reload `slides.txt`.
-4. (Optional) `View -> Enter Presentation Mode`
-5. Use `Next Slide` and `Previous Slide` actions. It's recommended to change default shortcuts to something more convenient, e.g. `F12`, `F11` (the only reason for defaults shortcuts `alt-shift-F12`, `alt-shift-F11` is that they don't conflict with other actions).
+4. (Optional) use presentation mode `View -> Enter Presentation Mode`
+5. Use `Next Slide` and `Previous Slide` actions. It's recommended to change default shortcuts to something more convenient (e.g. I use `F12`, `F11`; the only reason for defaults shortcuts `alt-shift-F12`, `alt-shift-F11` is that they don't conflict with other actions).
  
  
 ## Format of slides.txt
