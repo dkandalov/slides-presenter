@@ -43,6 +43,9 @@ fun Project.switchSlide(direction: Direction, stepSize: Int = 1) {
     val virtualFile = presentation.currentSlide.toVirtualFile(basePath!!)
         ?: return showNotification("Slide not found ${presentation.currentSlide}")
 
+    // Call `openFile` twice because it seems to solve the problem
+    // of slides with images not being fullscreen when using Full HD (1920×1080 px) resolution.
+    FileEditorManager.getInstance(this).openFile(virtualFile, true, true)
     FileEditorManager.getInstance(this).openFile(virtualFile, true, true)
 }
 
