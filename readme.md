@@ -18,6 +18,7 @@ It can be useful if large part of your presentation is based on code examples, s
 3. Edit `slides.txt` so that it contains paths to slides image files and code examples (see format description below). Note that you can use `Save All` action to make plugin reload `slides.txt`.
 4. (Optional) use presentation mode `View -> Enter Presentation Mode`
 5. Use `Next Slide` and `Previous Slide` actions. It's recommended to change default shortcuts to something more convenient (e.g. I use `F12`, `F11`; the only reason for defaults shortcuts `alt-shift-F12`, `alt-shift-F11` is that they don't conflict with other actions).
+6. Always check your presentation in advance on the actual setup.
  
  
 ## Format of slides.txt
