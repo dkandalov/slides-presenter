@@ -15,7 +15,7 @@ plugins {
     java
     idea
     kotlin("jvm") version "1.3.10"
-    id("org.jetbrains.intellij") version "0.4.8"
+    id("org.jetbrains.intellij") version "0.4.10"
 }
 java {
     sourceCompatibility = VERSION_1_8
