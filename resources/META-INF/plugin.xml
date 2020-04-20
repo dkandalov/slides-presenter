@@ -4,20 +4,15 @@
     <vendor url="http://github.com/dkandalov/slides-presenter">Dmitry Kandalov</vendor>
     <description>
         <![CDATA[
-        <html>
-        <body>
         This is a plugin to show slides and code examples directly from for IntelliJ IDEs.
         See <a href="https://github.com/dkandalov/slides-presenter">plugin page on GitHub</a> for more details.
-        </body>
-        </html>
         ]]>
     </description>
 
     <!-- http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html -->
-    <idea-version since-build="191.1.2"/>
+    <idea-version since-build="201.6668.113"/>
 
-    <!-- Make plugin available in all IntelliJ IDEs
-         http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
+    <!-- http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">

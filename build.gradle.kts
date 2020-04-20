@@ -1,6 +1,4 @@
 
-import org.gradle.api.JavaVersion.VERSION_1_8
-import org.jetbrains.kotlin.gradle.dsl.Coroutines
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
@@ -14,12 +12,8 @@ buildscript {
 plugins {
     java
     idea
-    kotlin("jvm") version "1.3.10"
-    id("org.jetbrains.intellij") version "0.4.10"
-}
-java {
-    sourceCompatibility = VERSION_1_8
-    targetCompatibility = VERSION_1_8
+    kotlin("jvm") version "1.3.70"
+    id("org.jetbrains.intellij") version "0.4.18"
 }
 
 repositories {
@@ -30,32 +24,31 @@ dependencies {
     testCompile("junit:junit:4.12")
 }
 
-java.sourceSets {
-    "main" {
+sourceSets {
+    main {
         java.srcDirs("./src")
         kotlin.srcDirs("./src")
         resources.srcDirs("./resources")
     }
-    "test" {
+    test {
         kotlin.srcDirs("./test")
     }
 }
 
 tasks.withType<KotlinJvmCompile> {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
         apiVersion = "1.3"
         languageVersion = "1.3"
     }
 }
 
-kotlin {
-    experimental.coroutines = Coroutines.ENABLE
-}
-
 intellij {
     // (to find available IDE versions see https://www.jetbrains.com/intellij-repository/releases)
-    val ideVersion = System.getenv().getOrDefault("SLIDES_PRESENTER_PLUGIN_IDEA_VERSION", "191.7141.44")
+    val ideVersion = System.getenv().getOrDefault("IJ_VERSION",
+        "201.6668.113"
+//			"LATEST-EAP-SNAPSHOT"
+    )
     println("Using ide version: $ideVersion")
     version = ideVersion
     pluginName = "slides-presenter"
