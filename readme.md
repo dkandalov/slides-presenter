@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/dkandalov/slides-presenter.svg?branch=master)](https://travis-ci.org/dkandalov/slides-presenter)
 
+## NOTE THAT BECAUSE OF API CHANGES THIS PLUGIN IS BROKEN IN LATEST INTELLIJ VERSIONS :(
+
 ## Slides presenter plugin
 This is a plugin to show slides and code examples directly from IntelliJ IDEs.
 
